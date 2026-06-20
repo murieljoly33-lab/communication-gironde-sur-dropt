@@ -3,172 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intranet - Gironde-sur-Dropt</title>
+    <title>Intranet - Gironde sur Dropt</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        droptVert: '#32b997',
+                        droptRouge: '#c54828', 
+                        droptRougeFonce: '#923118',
+                        droptRougeClair: '#dc6547',
+                        droptRougePastel: '#f8eeec',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .badge-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 9999px;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+    </style>
 </head>
-<body class="bg-slate-100 text-gray-800 font-sans">
+<body class="bg-gray-50 text-gray-800 font-sans pb-24 md:pb-0">
 
     <script>
-        // METTEZ ICI VOTRE LIEN SCRIPT COPIÉ DEPUIS GOOGLE APPS SCRIPT
+        // METTRE TON LIEN GOOGLE APPS SCRIPT ICI À LA LIGNE 43 :
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwPQDiVU09R0ucqMAcacytbkIKQBEUiEq0PAyEdx8HmRar0cTzbos1msMK6fwylUMbmQw/exec";
         
-        // LA VRAIE LISTE DE VOS ÉLUS ET LEURS ROLES
         const ADHERENTS = [
-            { nom: "Philippe Moutier", fonction: "Maire" },
-            { nom: "Cathy Rosolen", fonction: "Adjointe (Com, Enfance, Écoles, Culture, Assos, Patrimoine)" },
-            { nom: "Thierry Gaillac", fonction: "Adjoint (Travaux, Urbanisme, Sécurité, Bâtiments)" },
-            { nom: "Sylvie Dulong", fonction: "Adjointe (Solidarité, Social, Logement, CCAS)" },
-            { nom: "Jean-Marc Desqueyroux", fonction: "Adjoint (Cadre de vie, Environnement, Cimetière)" },
-            { nom: "Muriel Joly", fonction: "Conseillère (Com, Culture, Animations, Assos)" },
-            { nom: "Corinne Martinez", fonction: "Conseillère (Enfance, Jeunesse, Écoles)" }
+            { nom: "Philippe Moutier", fonction: "Maire", photo: "👨‍💼" },
+            { nom: "Graziella Chiappa", fonction: "1ère Adjointe", photo: "👩‍💼" },
+            { nom: "Nicolas Dusseaux", fonction: "2ème Adjoint", photo: "👨‍💼" },
+            { nom: "Marie-Pierre Rigaud", fonction: "3ème Adjointe", photo: "👩‍💼" },
+            { nom: "Hamid Laroui", fonction: "Conseiller Délégué", photo: "👨‍💻" },
+            { nom: "Cathy Rosolen", fonction: "Conseillère Déléguée", photo: "👩‍💻" },
+            { nom: "Antoine Combe", fonction: "Élu", photo: "🙋‍♂️" },
+            { nom: "Brigitte Brunato", fonction: "Élue", photo: "🙋‍♀️" },
+            { nom: "Arthur Rosolen", fonction: "Élu", photo: "🙋‍♂️" },
+            { nom: "Sandrine Montéro", fonction: "Élue", photo: "🙋‍♀️" },
+            { nom: "Franc Pétrolli", fonction: "Élu", photo: "🙋‍♂️" },
+            { nom: "Emilie Clavière-Kiss", fonction: "Élue", photo: "🙋‍♀️" },
+            { nom: "Marlène Larriaut", fonction: "Bénévole", photo: "🤝" },
+            { nom: "Muriel Joly", fonction: "Bénévole", photo: "🤝" }
         ];
 
         var categorieActuelle = "";
+        var statutFiltreActuel = "TOUT";
         var tousLesArticles = [];
     </script>
 
-    <!-- HEADER AUX COULEURS DE VOTRE CHARTE ORIGINALE (DÉGRADÉ DE ROUGE) -->
-    <header class="bg-gradient-to-r from-red-700 to-red-950 text-white p-4 sticky top-0 shadow-md z-30 flex justify-between items-center">
-        <div onclick="location.reload()" class="cursor-pointer flex items-center space-x-2">
-            <span class="text-xl">🏰</span>
-            <h1 class="text-base md:text-lg font-bold tracking-tight">Intranet Gironde-sur-Dropt</h1>
-        </div>
-        <div class="text-xs font-semibold bg-red-900/50 px-3 py-1.5 rounded-lg flex items-center gap-1 shadow-sm border border-red-500/30">
-            💻 Vue d'ensemble Élus
+    <header class="bg-droptVert text-white p-4 sticky top-0 shadow-md z-30">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div onclick="afficherAccueil()" class="cursor-pointer">
+                <h1 class="text-lg md:text-xl font-bold tracking-tight">Gironde-sur-Dropt</h1>
+                <p class="text-xs text-emerald-100">Espace Collaboratif Élus & Communication</p>
+            </div>
+            <div class="flex-1 max-w-md mx-4 relative hidden sm:block">
+                <input type="text" oninput="filtrerRecherche(this.value)" placeholder="Rechercher un mot, un lieu, un auteur..." class="w-full pl-9 pr-4 py-1.5 rounded-lg text-gray-800 text-sm focus:outline-none">
+                <span class="absolute left-3 top-2">🔍</span>
+            </div>
+            <button id="btnRetour" onclick="afficherAccueil()" class="hidden bg-white/20 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-white/30">⬅️ Menu</button>
         </div>
     </header>
 
-    <div class="max-w-7xl mx-auto p-4 lg:grid lg:grid-cols-3 lg:gap-6">
-        
-        <!-- COLONNE GAUCHE -->
-        <div class="lg:col-span-2 space-y-6">
-            
-            <!-- BLOC CALENDRIER (JUIN 2026) -->
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">📅 CALENDRIER DE L'ÉQUIPE (JUIN 2026)</h2>
-                <div class="grid grid-cols-7 gap-1 text-center text-xs font-bold text-gray-400 mb-2">
-                    <div>L</div><div>M</div><div>M</div><div>J</div><div>V</div><div>S</div><div>D</div>
-                </div>
-                <div id="grilleCalendrier" class="grid grid-cols-7 gap-1.5 text-center text-sm"></div>
-            </div>
-
-            <!-- BLOC COMMISSIONS AVEC COMPTEURS -->
-            <div id="zoneCommissions">
-                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">📁 COMMISSIONS &amp; PUBLICATIONS</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    
-                    <!-- Edito du Maire -->
-                    <div onclick="ouvrirCategorie('Edito du Maire')" class="bg-red-50 border border-red-200 p-4 rounded-xl flex items-center justify-between cursor-pointer hover:shadow-md transition">
-                        <div class="flex items-center space-x-4">
-                            <div class="p-3 bg-red-600 text-white rounded-lg text-xl">✍️</div>
-                            <div>
-                                <h4 class="font-bold text-red-900 text-sm">Édito du Maire</h4>
-                                <p class="text-xs text-red-600">Cliquez pour voir les publications</p>
-                            </div>
-                        </div>
-                        <span id="badge-Edito-du-Maire" class="bg-red-200 text-red-800 text-xs font-bold px-2 py-1 rounded-full">0</span>
-                    </div>
-
-                    <!-- Culture & Patrimoine -->
-                    <div onclick="ouvrirCategorie('Culture et Patrimoine')" class="bg-amber-50 border border-amber-200 p-4 rounded-xl flex items-center justify-between cursor-pointer hover:shadow-md transition">
-                        <div class="flex items-center space-x-4">
-                            <div class="p-3 bg-amber-500 text-white rounded-lg text-xl">🏛️</div>
-                            <div>
-                                <h4 class="font-bold text-amber-900 text-sm">Culture, Patrimoine &amp; Animations</h4>
-                                <p class="text-xs text-amber-600">Cliquez pour voir les publications</p>
-                            </div>
-                        </div>
-                        <span id="badge-Culture-et-Patrimoine" class="bg-amber-200 text-amber-800 text-xs font-bold px-2 py-1 rounded-full">0</span>
-                    </div>
-
-                    <!-- Enfance & Écoles -->
-                    <div onclick="ouvrirCategorie('Enfance et Jeunesse')" class="bg-blue-50 border border-blue-200 p-4 rounded-xl flex items-center justify-between cursor-pointer hover:shadow-md transition">
-                        <div class="flex items-center space-x-4">
-                            <div class="p-3 bg-blue-500 text-white rounded-lg text-xl">🎒</div>
-                            <div>
-                                <h4 class="font-bold text-blue-900 text-sm">Enfance, Jeunesse &amp; Écoles</h4>
-                                <p class="text-xs text-blue-600">Cliquez pour voir les publications</p>
-                            </div>
-                        </div>
-                        <span id="badge-Enfance-et-Jeunesse" class="bg-blue-200 text-blue-800 text-xs font-bold px-2 py-1 rounded-full">0</span>
-                    </div>
-
-                    <!-- Travaux & Urbanisme -->
-                    <div onclick="ouvrirCategorie('Travaux')" class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl flex items-center justify-between cursor-pointer hover:shadow-md transition">
-                        <div class="flex items-center space-x-4">
-                            <div class="p-3 bg-emerald-500 text-white rounded-lg text-xl">🚧</div>
-                            <div>
-                                <h4 class="font-bold text-emerald-900 text-sm">Travaux, Urbanisme &amp; Sécurité</h4>
-                                <p class="text-xs text-emerald-600">Cliquez pour voir les publications</p>
-                            </div>
-                        </div>
-                        <span id="badge-Travaux" class="bg-emerald-200 text-emerald-800 text-xs font-bold px-2 py-1 rounded-full">0</span>
-                    </div>
-
-                    <!-- Cadre de vie -->
-                    <div onclick="ouvrirCategorie('Cadre de vie')" class="bg-lime-50 border border-lime-200 p-4 rounded-xl flex items-center justify-between cursor-pointer hover:shadow-md transition">
-                        <div class="flex items-center space-x-4">
-                            <div class="p-3 bg-lime-500 text-white rounded-lg text-xl">🌿</div>
-                            <div>
-                                <h4 class="font-bold text-lime-900 text-sm">Cadre de vie &amp; Environnement</h4>
-                                <p class="text-xs text-lime-600">Cliquez pour voir les publications</p>
-                            </div>
-                        </div>
-                        <span id="badge-Cadre-de-vie" class="bg-lime-200 text-lime-800 text-xs font-bold px-2 py-1 rounded-full">0</span>
-                    </div>
-
-                    <!-- Divers / Infos -->
-                    <div onclick="ouvrirCategorie('Divers Infos')" class="bg-purple-50 border border-purple-200 p-4 rounded-xl flex items-center justify-between cursor-pointer hover:shadow-md transition">
-                        <div class="flex items-center space-x-4">
-                            <div class="p-3 bg-purple-500 text-white rounded-lg text-xl">📢</div>
-                            <div>
-                                <h4 class="font-bold text-purple-900 text-sm">Divers / Infos générales</h4>
-                                <p class="text-xs text-purple-600">Cliquez pour voir les publications</p>
-                            </div>
-                        </div>
-                        <span id="badge-Divers-Infos" class="bg-purple-200 text-purple-800 text-xs font-bold px-2 py-1 rounded-full">0</span>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- FIL D'ACTUALITÉS -->
-            <div id="zoneArticles" class="hidden space-y-4">
-                <div class="flex justify-between items-center">
-                    <h3 id="titreCategorie" class="font-bold text-gray-800 text-base">Publications</h3>
-                    <button onclick="fermerCategorie()" class="text-xs text-gray-500 hover:underline">← Retour aux commissions</button>
-                </div>
-                <div id="listeArticles" class="space-y-4"></div>
-            </div>
-
+    <div class="max-w-6xl mx-auto p-4 md:grid md:grid-cols-3 md:gap-6">
+        <div class="block sm:hidden mb-4 relative">
+            <input type="text" oninput="filtrerRecherche(this.value)" placeholder="🔍 Rechercher un mot, un lieu..." class="w-full border-2 border-gray-200 p-2.5 rounded-xl text-sm focus:outline-none">
         </div>
 
-        <!-- COLONNE DROITE : FORMULAIRE -->
-        <div class="mt-6 lg:mt-0">
-            <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 sticky top-24">
-                <h3 class="font-bold text-sm text-gray-800 mb-4 flex items-center gap-1">📝 Nouvelle Publication</h3>
-                
+        <div class="md:col-span-2 space-y-5">
+            <div id="pageAccueil" class="space-y-5">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                    <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">📅 Calendrier Global de l'Équipe (Juin 2026)</h2>
+                    <div class="grid grid-cols-7 gap-1 text-center text-xs font-bold text-gray-400 mb-1">
+                        <div>L</div><div>M</div><div>M</div><div>J</div><div>V</div><div>S</div><div>D</div>
+                    </div>
+                    <div class="grid grid-cols-7 gap-1 text-center text-sm">
+                        <div class="text-gray-300 py-1.5">1</div><div class="text-gray-300 py-1.5">2</div><div class="text-gray-300 py-1.5">3</div><div class="text-gray-300 py-1.5">4</div><div class="text-gray-300 py-1.5">5</div><div class="text-gray-700 py-1.5">6</div><div class="text-gray-700 py-1.5">7</div>
+                        <div class="text-gray-700 py-1.5">8</div><div class="text-gray-700 py-1.5">9</div><div class="text-gray-700 py-1.5">10</div><div class="text-gray-700 py-1.5">11</div><div class="text-gray-700 py-1.5">12</div><div class="text-gray-700 py-1.5">13</div><div class="text-gray-700 py-1.5">14</div>
+                        <div class="text-gray-700 py-1.5">15</div><div class="text-gray-700 py-1.5">16</div><div class="text-gray-700 py-1.5">17</div><div class="text-gray-700 py-1.5">18</div><div class="bg-emerald-100 text-droptVert font-bold py-1.5 rounded-lg">19</div><div class="text-gray-700 py-1.5">20</div><div class="text-gray-700 py-1.5">21</div>
+                        <div class="bg-droptRouge text-white font-bold py-1.5 rounded-lg">22</div><div class="text-gray-700 py-1.5">23</div><div class="text-gray-700 py-1.5">24</div><div class="text-gray-700 py-1.5">25</div><div class="text-gray-700 py-1.5">26</div><div class="text-gray-700 py-1.5">27</div><div class="text-gray-700 py-1.5">28</div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">📁 Commissions & Thématiques</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div onclick="ouvrirCategorie('Edito du Maire')" class="relative bg-droptRougeFonce text-white p-4 rounded-xl shadow-sm h-24 flex flex-col justify-between cursor-pointer active:scale-95 transition-transform"><span class="text-xl">✍️</span><span class="text-xs font-bold">Édito du Maire</span><span id="badge-Edito-du-Maire" class="badge-count hidden">0</span></div>
+                        <div onclick="ouvrirCategorie('État Civil')" class="relative bg-droptRouge text-white p-4 rounded-xl shadow-sm h-24 flex flex-col justify-between cursor-pointer active:scale-95 transition-transform"><span class="text-xl">📜</span><span class="text-xs font-bold">État Civil</span><span id="badge-Etat-Civil" class="badge-count hidden">0</span></div>
+                        <div onclick="ouvrirCategorie('CCAS')" class="relative bg-droptRougeClair text-white p-4 rounded-xl shadow-sm h-24 flex flex-col justify-between cursor-pointer active:scale-95 transition-transform"><span class="text-xl">🤝</span><span class="text-xs font-bold">CCAS</span><span id="badge-CCAS" class="badge-count hidden">0</span></div>
+                        <div onclick="ouvrirCategorie('Budget')" class="relative bg-[#e4765a] text-white p-4 rounded-xl shadow-sm h-24 flex flex-col justify-between cursor-pointer active:scale-95 transition-transform"><span class="text-xl">📊</span><span class="text-xs font-bold">Budget</span><span id="badge-Budget" class="badge-count hidden">0</span></div>
+                        <div onclick="ouvrirCategorie('Travaux')" class="relative bg-[#923118] text-white p-4 rounded-xl shadow-sm h-24 flex flex-col justify-between cursor-pointer active:scale-95 transition-transform"><span class="text-xl">🚧</span><span class="text-xs font-bold">Travaux</span><span id="badge-Travaux" class="badge-count hidden">0</span></div>
+                        <div onclick="ouvrirCategorie('Enfance et Jeunesse')" class="relative bg-[#eb8c74] text-white p-4 rounded-xl shadow-sm h-24 flex flex-col justify-between cursor-pointer active:scale-95 transition-transform"><span class="text-xl">🎒</span><span class="text-xs font-bold">Enfance & Jeunesse</span><span id="badge-Enfance-et-Jeunesse" class="badge-count hidden">0</span></div>
+                        <div onclick="ouvrirCategorie('Nos Aînés')" class="relative bg-[#f0a390] text-white p-4 rounded-xl shadow-sm h-24 flex flex-col justify-between cursor-pointer active:scale-95 transition-transform"><span class="text-xl">🧓</span><span class="text-xs font-bold">Nos Aînés</span><span id="badge-Nos-Aines" class="badge-count hidden">0</span></div>
+                        <div onclick="ouvrirCategorie('Culture et Patrimoine')" class="relative bg-emerald-600 text-white p-4 rounded-xl shadow-sm h-24 flex flex-col justify-between cursor-pointer active:scale-95 transition-transform"><span class="text-xl">🏛️</span><span class="text-xs font-bold">Culture & Patrimoine</span><span id="badge-Culture-et-Patrimoine" class="badge-count hidden">0</span></div>
+                        <div onclick="ouvrirCategorie('Événements')" class="relative bg-droptVert text-white p-4 rounded-xl shadow-sm h-24 flex flex-col justify-between cursor-pointer active:scale-95 transition-transform"><span class="text-xl">🎉</span><span class="text-xs font-bold">Événements</span><span id="badge-Evenements" class="badge-count hidden">0</span></div>
+                        <div onclick="ouvrirCategorie('Fiscalité')" class="relative bg-teal-600 text-white p-4 rounded-xl shadow-sm h-24 flex flex-col justify-between cursor-pointer active:scale-95 transition-transform"><span class="text-xl">💶</span><span class="text-xs font-bold">Fiscalité</span><span id="badge-Fiscalite" class="badge-count hidden">0</span></div>
+                        <div onclick="ouvrirCategorie('Écologie')" class="relative bg-emerald-500 text-white p-4 rounded-xl shadow-sm h-24 flex flex-col justify-between cursor-pointer active:scale-95 transition-transform"><span class="text-xl">🌿</span><span class="text-xs font-bold">Écologie</span><span id="badge-Ecologie" class="badge-count hidden">0</span></div>
+                        <div onclick="ouvrirCategorie('Intempéries')" class="relative bg-blue-600 text-white p-4 rounded-xl shadow-sm h-24 flex flex-col justify-between cursor-pointer active:scale-95 transition-transform"><span class="text-xl">⛈️</span><span class="text-xs font-bold">Intempéries</span><span id="badge-Intemperies" class="badge-count hidden">0</span></div>
+                        <div onclick="ouvrirCategorie('Sport et Loisirs')" class="relative bg-amber-600 text-white p-4 rounded-xl shadow-sm h-24 flex flex-col justify-between cursor-pointer active:scale-95 transition-transform"><span class="text-xl">⚽</span><span class="text-xs font-bold">Sport & Loisirs</span><span id="badge-Sport-et-Loisirs" class="badge-count hidden">0</span></div>
+                        <div onclick="ouvrirCategorie('Incivilité')" class="relative bg-red-800 text-white p-4 rounded-xl shadow-sm h-24 flex flex-col justify-between cursor-pointer active:scale-95 transition-transform"><span class="text-xl">🛑</span><span class="text-xs font-bold">Incivilité</span><span id="badge-Incivilite" class="badge-count hidden">0</span></div>
+                        <div onclick="ouvrirCategorie('Divers Infos')" class="relative bg-slate-500 text-white p-4 rounded-xl shadow-sm h-24 flex flex-col justify-between cursor-pointer active:scale-95 transition-transform"><span class="text-xl">ℹ️</span><span class="text-xs font-bold">Divers Infos</span><span id="badge-Divers-Infos" class="badge-count hidden">0</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="pageCategorie" class="hidden space-y-4">
+                <div class="flex items-center space-x-2">
+                    <span id="titreIcone" class="text-2xl">🚧</span>
+                    <h2 id="titreCategorie" class="text-xl font-bold text-gray-800">Travaux</h2>
+                </div>
+
+                <div class="flex flex-wrap gap-1 bg-gray-200 p-1 rounded-lg text-xs font-bold">
+                    <button id="btnStatutTout" onclick="changerFiltreStatut('TOUT')" class="flex-1 py-2 px-1 bg-white text-droptRouge rounded-md shadow-sm">📋 Tout afficher</button>
+                    <button id="btnStatutAvenir" onclick="changerFiltreStatut('⏳ À venir')" class="flex-1 py-2 px-1 text-gray-600">⏳ À venir</button>
+                    <button id="btnStatutEnCours" onclick="changerFiltreStatut('🛠️ En cours')" class="flex-1 py-2 px-1 text-gray-600">🛠️ En cours</button>
+                    <button id="btnStatutTermine" onclick="changerFiltreStatut('✅ Terminé')" class="flex-1 py-2 px-1 text-gray-600">✅ Terminé</button>
+                    <button id="btnStatutReporte" onclick="changerFiltreStatut('❌ Reporté')" class="flex-1 py-2 px-1 text-gray-600">❌ Reporté</button>
+                </div>
+
+                <div id="listeArticles" class="space-y-4"></div>
+            </div>
+        </div>
+
+        <div id="formContainer" class="hidden md:block fixed inset-0 bg-black/50 md:relative md:bg-transparent z-40 md:z-0">
+            <div class="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl p-5 max-h-[90vh] overflow-y-auto md:relative md:rounded-xl md:shadow-sm md:border md:border-gray-200 max-w-md mx-auto md:mx-0 md:p-5">
+                <div class="flex justify-between items-center mb-4 border-b pb-2">
+                    <h3 class="font-bold text-base text-gray-800">✍️ Nouvelle Publication</h3>
+                    <button onclick="toggleForm()" class="text-gray-400 text-2xl md:hidden">&times;</button>
+                </div>
+
                 <form id="publicationForm" class="space-y-4 text-xs" onsubmit="soumettreFormulaire(event)">
                     <div>
-                        <label class="block font-semibold text-gray-600 mb-1">1. QUI ÊTES-VOUS ?</label>
-                        <select id="formAuteur" class="w-full border rounded-lg p-2.5 bg-gray-50 font-medium"></select>
+                        <label class="block font-bold text-gray-500 uppercase mb-1">1. Qui êtes-vous ?</label>
+                        <select id="formAuteur" class="w-full border rounded-lg p-2 bg-white font-medium focus:border-droptVert" onchange="updateAdherentInfo()"></select>
+                        <div id="adherentBadge" class="mt-2 flex items-center space-x-2 text-gray-500 italic"></div>
                     </div>
 
                     <div>
-                        <label class="block font-semibold text-gray-600 mb-1">2. COMMISSION CIBLE</label>
-                        <select id="formCommission" class="w-full border rounded-lg p-2.5 bg-gray-50 font-medium">
+                        <label class="block font-bold text-gray-500 uppercase mb-1">2. Commission Cible</label>
+                        <select id="formCommission" class="w-full border rounded-lg p-2 bg-white font-medium focus:border-droptVert">
                             <option value="Edito du Maire">✍️ Édito du Maire</option>
-                            <option value="Culture et Patrimoine">🏛️ Culture, Patrimoine &amp; Animations</option>
-                            <option value="Enfance et Jeunesse">🎒 Enfance, Jeunesse &amp; Écoles</option>
-                            <option value="Travaux">🚧 Travaux, Urbanisme &amp; Sécurité</option>
-                            <option value="Cadre de vie">🌿 Cadre de vie &amp; Environnement</option>
-                            <option value="Divers Infos">📢 Divers / Infos générales</option>
+                            <option value="État Civil">📜 État Civil</option>
+                            <option value="CCAS">🤝 CCAS</option>
+                            <option value="Budget">📊 Budget</option>
+                            <option value="Travaux" selected>🚧 Travaux</option>
+                            <option value="Enfance et Jeunesse">🎒 Enfance & Jeunesse</option>
+                            <option value="Nos Aînés">🧓 Nos Aînés</option>
+                            <option value="Culture et Patrimoine">🏛️ Culture & Patrimoine</option>
+                            <option value="Événements">🎉 Événements</option>
+                            <option value="Fiscalité">💶 Fiscalité</option>
+                            <option value="Écologie">🌿 Écologie</option>
+                            <option value="Intempéries">⛈️ Intempéries</option>
+                            <option value="Sport et Loisirs">⚽ Sport & Loisirs</option>
+                            <option value="Incivilité">🛑 Incivilité</option>
+                            <option value="Divers Infos">ℹ️ Divers Infos</option>
                         </select>
                     </div>
 
                     <div>
-                        <label class="block font-semibold text-gray-600 mb-1">3. STATUT INITIAL</label>
-                        <select id="formStatut" class="w-full border rounded-lg p-2.5 bg-gray-50 font-medium">
+                        <label class="block font-bold text-gray-500 uppercase mb-1">3. Statut initial de l'information</label>
+                        <select id="formStatut" class="w-full border rounded-lg p-2 bg-white font-medium focus:border-droptVert">
                             <option value="⏳ À venir">⏳ À venir</option>
                             <option value="🛠️ En cours">🛠️ En cours</option>
                             <option value="✅ Terminé">✅ Terminé</option>
@@ -177,44 +184,41 @@
                     </div>
 
                     <div>
-                        <label class="block font-semibold text-gray-600 mb-1">📅 DATE &amp; HEURE DE L'ÉVÉNEMENT (Optionnel)</label>
-                        <input type="datetime-local" id="formDateEvenement" class="w-full border rounded-lg p-2.5 bg-gray-50 font-medium">
+                        <label class="block font-bold text-gray-500 uppercase mb-1">4. Objet / Titre court</label>
+                        <input type="text" id="formSujet" placeholder="Ex: Dépôt sauvage Rue du Port" class="w-full border rounded-lg p-2" required>
                     </div>
 
                     <div>
-                        <label class="block font-semibold text-gray-600 mb-1">4. OBJET / TITRE COURT</label>
-                        <input type="text" id="formSujet" placeholder="Ex: Réparation éclairage église" class="w-full border rounded-lg p-2.5 bg-gray-50" required>
-                    </div>
-
-                    <div>
-                        <label class="block font-semibold text-gray-600 mb-1">5. CONTENU DÉTAILLÉ</label>
-                        <textarea id="formContenu" rows="4" placeholder="Détaillez l'information ici..." class="w-full border rounded-lg p-2.5 bg-gray-50" required></textarea>
-                    </div>
-
-                    <div>
-                        <label class="block font-semibold text-gray-600 mb-1">6. DIFFUSION DEMANDÉE</label>
-                        <div class="grid grid-cols-3 gap-2 mt-1">
-                            <label class="flex items-center space-x-1 border p-2 rounded bg-gray-50 cursor-pointer text-[10px]">
-                                <input type="checkbox" id="diffJournal" class="rounded border-gray-300"> <span>📰 Journal</span>
-                            </label>
-                            <label class="flex items-center space-x-1 border p-2 rounded bg-gray-50 cursor-pointer text-[10px]">
-                                <input type="checkbox" id="diffSite" class="rounded border-gray-300"> <span>🌐 Site</span>
-                            </label>
-                            <!-- RETOUR DU FLYER COLLONNE L -->
-                            <label class="flex items-center space-x-1 border p-2 rounded bg-gray-50 cursor-pointer text-[10px]">
-                                <input type="checkbox" id="diffFlyer" class="rounded border-gray-300"> <span>📄 Flyer</span>
-                            </label>
+                        <label class="block font-bold text-gray-500 uppercase mb-1.5">5. Diffusion demandée</label>
+                        <div class="grid grid-cols-2 gap-1.5 font-medium">
+                            <label class="flex items-center space-x-1.5 border p-2 rounded-lg bg-gray-50 cursor-pointer"><input type="checkbox" id="diffJournal" class="accent-droptVert"> <span>📰 Journal municipal</span></label>
+                            <label class="flex items-center space-x-1.5 border p-2 rounded-lg bg-gray-50 cursor-pointer"><input type="checkbox" id="diffSite" class="accent-droptVert"> <span>🌐 Site Internet</span></label>
+                            <label class="flex items-center space-x-1.5 border p-2 rounded-lg bg-gray-50 cursor-pointer"><input type="checkbox" id="diffInterne" checked class="accent-droptVert"> <span>🔒 Interne Élus</span></label>
+                            <label class="flex items-center space-x-1.5 border p-2 rounded-lg bg-gray-50 cursor-pointer"><input type="checkbox" id="diffFlyer" class="accent-droptRouge"> <span class="text-droptRouge font-bold">🎨 Besoin Flyer PDF</span></label>
                         </div>
                     </div>
 
-                    <button type="submit" id="btnSubmit" class="w-full bg-gradient-to-r from-red-700 to-red-800 text-white font-bold p-3 rounded-xl shadow hover:from-red-800 hover:to-red-900 transition flex justify-center items-center gap-2 text-sm">
-                        <span>🚀 Publier l'information</span>
-                    </button>
+                    <div>
+                        <label class="block font-bold text-gray-500 uppercase mb-1">6. Pièces Jointes</label>
+                        <input type="file" id="formFiles" multiple class="w-full text-xs border p-1 rounded-lg bg-gray-50">
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-gray-500 uppercase mb-1">7. Contenu détaillé</label>
+                        <textarea id="formContenu" rows="4" placeholder="Écrivez votre message ici..." class="w-full border rounded-lg p-2" required></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-droptVert text-white font-bold p-3 rounded-lg shadow hover:bg-emerald-600 transition">🚀 Publier l'information</button>
                 </form>
             </div>
         </div>
-
     </div>
+
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 shadow-lg z-20 md:hidden flex justify-around items-center">
+        <button onclick="afficherAccueil()" class="text-droptVert text-xs font-semibold flex flex-col items-center"><span class="text-xl">📅</span> Accueil</button>
+        <button onclick="toggleForm()" class="bg-droptVert text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold shadow-md transform -translate-y-3">+</button>
+        <button onclick="ouvrirCategorie('Travaux')" class="text-gray-400 text-xs font-medium flex flex-col items-center"><span class="text-xl">🚧</span> Travaux</button>
+    </nav>
 
     <script>
         window.onload = function() {
@@ -222,154 +226,264 @@
             ADHERENTS.forEach(function(a) {
                 var opt = document.createElement("option");
                 opt.value = a.nom;
-                opt.innerText = a.nom + " (" + a.fonction + ")";
+                opt.innerText = a.photo + " " + a.nom;
                 select.appendChild(opt);
             });
+            updateAdherentInfo();
             chargerDonnees();
         };
 
-        function chargerDonnees() {
-            fetch(GOOGLE_SCRIPT_URL)
-            .then(res => res.json())
-            .then(data => {
-                tousLesArticles = data;
-                calculerCompteurs();
-                genererCalendrier();
-                if(categorieActuelle !== "") afficherArticles();
-            });
+        function updateAdherentInfo() {
+            var nom = document.getElementById("formAuteur").value;
+            var adh = ADHERENTS.find(a => a.nom === nom);
+            document.getElementById("adherentBadge").innerText = "Fonction officielle : " + adh.fonction;
         }
 
-        function calculerCompteurs() {
-            const categories = ['Edito du Maire', 'Culture et Patrimoine', 'Enfance et Jeunesse', 'Travaux', 'Cadre de vie', 'Divers Infos'];
-            categories.forEach(cat => {
-                let count = tousLesArticles.filter(a => a.commission === cat).length;
-                let elementId = "badge-" + cat.replace(/ /g, "-");
-                let badge = document.getElementById(elementId);
-                if(badge) badge.innerText = count;
-            });
-        }
-
-        function genererCalendrier() {
-            const container = document.getElementById("grilleCalendrier");
-            if(!container) return;
-            container.innerHTML = "";
-
-            for (let i = 1; i <= 30; i++) {
-                let dayBox = document.createElement("div");
-                dayBox.className = "bg-gray-50 text-gray-700 py-2 rounded-lg text-xs font-semibold border border-gray-100 relative";
-                dayBox.innerText = i;
-
-                let correspondances = tousLesArticles.filter(art => {
-                    if(!art.date_evenement) return false;
-                    let d = new Date(art.date_evenement);
-                    return d.getDate() === i && d.getMonth() === 5 && d.getFullYear() === 2026;
-                });
-
-                if(correspondances.length > 0) {
-                    let aDesTravaux = correspondances.some(art => art.commission === "Travaux");
-                    if(aDesTravaux) {
-                        dayBox.className = "bg-amber-500 text-white py-2 rounded-lg text-xs font-bold shadow-sm cursor-pointer";
-                    } else {
-                        dayBox.className = "bg-red-600 text-white py-2 rounded-lg text-xs font-bold shadow-sm cursor-pointer";
-                    }
-                    dayBox.title = correspondances.map(art => `[${art.commission}] ${art.sujet}`).join("\n");
-                }
-
-                container.appendChild(dayBox);
+        function toggleForm() {
+            if (window.innerWidth < 768) {
+                document.getElementById('formContainer').classList.toggle('hidden');
             }
         }
 
         function ouvrirCategorie(cat) {
             categorieActuelle = cat;
-            document.getElementById("zoneCommissions").classList.add("hidden");
-            document.getElementById("zoneArticles").classList.remove("hidden");
-            document.getElementById("titreCategorie").innerText = "📂 Publications : " + cat;
-            afficherArticles();
+            document.getElementById('pageAccueil').classList.add('hidden');
+            document.getElementById('pageCategorie').classList.remove('hidden');
+            document.getElementById('btnRetour').classList.remove('hidden');
+            document.getElementById('titreCategorie').innerText = cat;
+            
+            let icone = "📁";
+            if(cat === "Edito du Maire") icone = "✍️";
+            else if(cat === "État Civil") icone = "📜";
+            else if(cat === "CCAS") icone = "🤝";
+            else if(cat === "Budget") icone = "📊";
+            else if(cat === "Travaux") icone = "🚧";
+            else if(cat === "Enfance et Jeunesse") icone = "🎒";
+            else if(cat === "Nos Aînés") icone = "🧓";
+            else if(cat === "Culture et Patrimoine") icone = "🏛️";
+            else if(cat === "Événements") icone = "🎉";
+            else if(cat === "Fiscalité") icone = "💶";
+            else if(cat === "Écologie") icone = "🌿";
+            else if(cat === "Intempéries") icone = "⛈️";
+            else if(cat === "Sport et Loisirs") icone = "⚽";
+            else if(cat === "Incivilité") icone = "🛑";
+            else if(cat === "Divers Infos") icone = "ℹ️";
+            
+            document.getElementById('titreIcone').innerText = icone;
+            changerFiltreStatut("TOUT");
         }
 
-        function fermerCategorie() {
-            categorieActuelle = "";
-            document.getElementById("zoneCommissions").classList.remove("hidden");
-            document.getElementById("zoneArticles").classList.add("hidden");
-        }
-
-        function afficherArticles() {
-            let liste = document.getElementById("listeArticles");
-            liste.innerHTML = "";
+        function changerFiltreStatut(statut) {
+            statutFiltreActuel = statut;
+            const statuts = ["TOUT", "⏳ À venir", "🛠️ En cours", "✅ Terminé", "❌ Reporté"];
+            const IDs = ["btnStatutTout", "btnStatutAvenir", "btnStatutEnCours", "btnStatutTermine", "btnStatutReporte"];
             
-            let filtres = tousLesArticles.filter(a => a.commission === categorieActuelle);
-            
-            if(filtres.length === 0) {
-                liste.innerHTML = "<p class='text-xs text-gray-400 italic p-4 bg-white rounded-xl border'>Aucune publication dans cette commission.</p>";
-                return;
-            }
-
-            filtres.reverse().forEach(a => {
-                let dateTxt = "";
-                if(a.date_evenement) {
-                    let d = new Date(a.date_evenement);
-                    dateTxt = `<p class="text-xs text-red-600 font-bold mt-1">📅 Événement prévu le : ${d.toLocaleDateString('fr-FR')} à ${d.toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'})}</p>`;
+            IDs.forEach((id, index) => {
+                const btn = document.getElementById(id);
+                if(statuts[index] === statut) {
+                    btn.className = "flex-1 py-2 px-1 bg-white text-droptRouge rounded-md shadow-sm";
+                } else {
+                    btn.className = "flex-1 py-2 px-1 text-gray-600";
                 }
-
-                let diffusions = [];
-                if(a.journal_municipal) diffusions.push("📰 Journal");
-                if(a.site_internet) diffusions.push("🌐 Site");
-                if(a.flyer) diffusions.push("📄 Flyer");
-
-                liste.innerHTML += `
-                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 space-y-2">
-                        <div class="flex justify-between items-center text-[11px]">
-                            <span class="font-bold text-gray-500">👤 ${a.auteur}</span>
-                            <span class="bg-gray-100 px-2 py-0.5 rounded text-gray-700 font-bold">${a.statut}</span>
-                        </div>
-                        <h4 class="font-bold text-sm text-gray-900">${a.sujet}</h4>
-                        <p class="text-[10px] text-gray-400 italic">${a.fonction}</p>
-                        ${dateTxt}
-                        <p class="text-xs text-gray-600 leading-relaxed">${a.contenu}</p>
-                        ${diffusions.length > 0 ? `<div class="pt-2 text-[10px] text-gray-400 font-medium">Diffusion : ${diffusions.join(' | ')}</div>` : ''}
-                    </div>
-                `;
             });
+            filtrerArticles();
+        }
+
+        function afficherAccueil() {
+            document.getElementById('pageAccueil').classList.remove('hidden');
+            document.getElementById('pageCategorie').classList.add('hidden');
+            document.getElementById('btnRetour').classList.add('hidden');
+            calculerCompteursGlobal();
+        }
+
+        function exporterVersAgenda(sujet, contenu) {
+            var icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:" + sujet + "\nDESCRIPTION:" + contenu + "\nDTSTART:20260622T080000Z\nDTEND:20260622T180000Z\nEND:VEVENT\nEND:VCALENDAR";
+            var blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8;' });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute('download', sujet.replace(/\s+/g, '_') + '.ics');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         function soumettreFormulaire(e) {
             e.preventDefault();
-            let btn = document.getElementById("btnSubmit");
-            btn.disabled = true;
-            btn.innerText = "Synchronisation... ⏳";
+            var submitButton = e.target.querySelector('button[type="submit"]');
+            submitButton.innerText = "Synchronisation en cours... ⏳";
+            submitButton.disabled = true;
 
-            let auteurSel = document.getElementById("formAuteur").value;
-            let adherent = ADHERENTS.find(a => a.nom === auteurSel);
-            let fonctionSel = adherent ? adherent.fonction : "";
+            var filesInput = document.getElementById("formFiles");
+            var filePromises = [];
 
-            let payload = {
-                auteur: auteurSel,
-                fonction: fonctionSel,
-                commission: document.getElementById("formCommission").value,
-                statut: document.getElementById("formStatut").value,
-                date_evenement: document.getElementById("formDateEvenement").value,
-                sujet: document.getElementById("formSujet").value,
-                contenu: document.getElementById("formContenu").value,
-                journal_municipal: document.getElementById("diffJournal").checked,
-                site_internet: document.getElementById("diffSite").checked,
-                flyer: document.getElementById("diffFlyer").checked
-            };
+            for (var i = 0; i < filesInput.files.length; i++) {
+                filePromises.push(readFileAsBase64(filesInput.files[i]));
+            }
 
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: "POST",
-                body: JSON.stringify(payload)
-            })
-            .then(res => res.json())
-            .then(res => {
-                alert("Publication réussie !");
-                document.getElementById("publicationForm").reset();
-                chargerDonnees();
-            })
-            .catch(err => alert("Erreur de connexion."))
-            .finally(() => {
-                btn.disabled = false;
-                btn.innerText = "🚀 Publier l'information";
+            Promise.all(filePromises).then(function(filesData) {
+                var nomAuteur = document.getElementById("formAuteur").value;
+                var fct = ADHERENTS.find(a => a.nom === nomAuteur).fonction;
+                
+                var payload = {
+                    auteur: nomAuteur,
+                    fonction: fct,
+                    commission: document.getElementById("formCommission").value,
+                    statut: document.getElementById("formStatut").value,
+                    sujet: document.getElementById("formSujet").value,
+                    contenu: document.getElementById("formContenu").value,
+                    journal_municipal: document.getElementById("diffJournal").checked,
+                    site_internet: document.getElementById("diffSite").checked,
+                    info_interne: document.getElementById("diffInterne").checked,
+                    demande_flyer: document.getElementById("diffFlyer").checked,
+                    files: filesData
+                };
+
+                fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                })
+                .then(res => res.json())
+                .then(response => {
+                    alert("Succès ! L'information a été enregistrée.");
+                    document.getElementById("publicationForm").reset();
+                    toggleForm();
+                    chargerDonnees();
+                })
+                .catch(err => alert("Erreur réseau."))
+                .finally(() => {
+                    submitButton.innerText = "🚀 Publier l'information";
+                    submitButton.disabled = false;
+                });
             });
+        }
+
+        function readFileAsBase64(file) {
+            return new Promise((resolve, reject) => {
+                var reader = new FileReader();
+                reader.onload = function() {
+                    var base64String = reader.result.split(',')[1];
+                    resolve({ name: file.name, mimeType: file.type, base64: base64String });
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function chargerDonnees() {
+            if(GOOGLE_SCRIPT_URL === "VOTRE_URL_GOOGLE_APPS_SCRIPT_ICI") return;
+            fetch(GOOGLE_SCRIPT_URL)
+            .then(res => res.json())
+            .then(data => {
+                tousLesArticles = data;
+                calculerCompteursGlobal();
+                if(categorieActuelle !== "") filtrerArticles();
+            });
+        }
+
+        function calculerCompteursGlobal() {
+            const categoriesId = ["Edito du Maire", "État Civil", "CCAS", "Budget", "Travaux", "Enfance et Jeunesse", "Nos Aînés", "Culture et Patrimoine", "Événements", "Fiscalité", "Écologie", "Intempéries", "Sport et Loisirs", "Incivilité", "Divers Infos"];
+            let comptes = {};
+            categoriesId.forEach(id => comptes[id] = 0);
+
+            tousLesArticles.forEach(a => {
+                if(comptes[a.commission] !== undefined) {
+                    comptes[a.commission]++;
+                }
+            });
+
+            categoriesId.forEach(cat => {
+                let formatId = "badge-" + cat.replace(/\s+/g, '-').replace(/&/g, 'et');
+                let badge = document.getElementById(formatId);
+                if(badge) {
+                    if(comptes[cat] > 0) {
+                        badge.innerText = comptes[cat];
+                        badge.classList.remove('hidden');
+                    } else {
+                        badge.classList.add('hidden');
+                    }
+                }
+            });
+        }
+
+        function filtrerArticles() {
+            var html = "";
+            var filtres = tousLesArticles.filter(a => {
+                var matchCat = a.commission === categorieActuelle;
+                var matchStatut = (statutFiltreActuel === "TOUT" || a.statut === statutFiltreActuel);
+                return matchCat && matchStatut;
+            });
+            
+            if(filtres.length === 0) {
+                html = `<p class='text-xs text-gray-400 italic p-4 text-center'>Aucun article à afficher avec ces critères.</p>`;
+            }
+            
+            filtres.reverse().forEach(function(a) {
+                var mediaHtml = "";
+                if(a.fichiers && a.fichiers.length > 0) {
+                    a.fichiers.forEach(function(url, idx) {
+                        if(url.trim() !== "") {
+                            mediaHtml += `<div class="mt-2 bg-gray-50 p-2 rounded flex items-center justify-between text-xs border">
+                                <span class="text-gray-500 font-medium truncate max-w-[200px]">📎 Fichier joint #${idx+1}</span>
+                                <a href="${url}" target="_blank" class="bg-droptVert text-white text-[10px] px-2.5 py-1 rounded font-bold">📥 Ouvrir</a>
+                            </div>`;
+                        }
+                    });
+                }
+
+                html += `<div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-3">
+                    <div class="flex justify-between items-center text-xs text-gray-400">
+                        <span class="font-semibold text-gray-700">👤 ${a.auteur} (${a.fonction})</span>
+                        <span class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded font-bold">${a.statut || '⏳ À venir'}</span>
+                    </div>
+                    <h4 class="font-bold text-gray-900 text-sm">${a.sujet}</h4>
+                    <p class="text-xs text-gray-600 leading-relaxed">${a.contenu}</p>
+                    ${mediaHtml}
+                    <div class="flex justify-between items-center pt-2 border-t text-[10px]">
+                        <div class="space-x-1">
+                            ${a.journal_municipal ? '<span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-bold">📰 Journal</span>' : ''}
+                            ${a.site_internet ? '<span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">🌐 Site</span>' : ''}
+                            ${a.demande_flyer ? '<span class="bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-bold">🎨 Flyer</span>' : ''}
+                        </div>
+                        <button onclick="exporterVersAgenda('${a.sujet.replace(/'/g, "\\'")}', '${a.contenu.replace(/'/g, "\\'")}')" class="text-droptVert font-bold flex items-center gap-1 hover:underline">
+                            📅 Ajouter à mon agenda
+                        </button>
+                    </div>
+                </div>`;
+            });
+            document.getElementById("listeArticles").innerHTML = html;
+        }
+
+        function filtrerRecherche(val) {
+            if(val.trim() === "") {
+                afficherAccueil();
+                return;
+            }
+            var html = "";
+            var resultats = tousLesArticles.filter(a => {
+                return a.sujet.toLowerCase().includes(val.toLowerCase()) || 
+                       a.contenu.toLowerCase().includes(val.toLowerCase()) || 
+                       a.auteur.toLowerCase().includes(val.toLowerCase());
+            });
+
+            document.getElementById('pageAccueil').classList.add('hidden');
+            document.getElementById('pageCategorie').classList.remove('hidden');
+            document.getElementById('btnRetour').classList.remove('hidden');
+            document.getElementById('titreCategorie').innerText = `Résultats pour "${val}"`;
+            document.getElementById('titreIcone').innerText = "🔍";
+
+            if(resultats.length === 0) {
+                html = `<p class='text-xs text-gray-400 italic p-4 text-center'>Aucun résultat trouvé.</p>`;
+            } else {
+                resultats.forEach(function(a) {
+                    html += `<div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-2">
+                        <span class="text-[10px] uppercase font-bold text-gray-400">📁 ${a.commission}</span>
+                        <h4 class="font-bold text-gray-900 text-sm">${a.sujet}</h4>
+                        <p class="text-xs text-gray-600">${a.contenu.substring(0, 100)}...</p>
+                        <button onclick="ouvrirCategorie('${a.commission}')" class="text-droptVert text-xs font-bold hover:underline">Voir dans la commission →</button>
+                    </div>`;
+                });
+            }
+            document.getElementById("listeArticles").innerHTML = html;
         }
     </script>
 </body>
