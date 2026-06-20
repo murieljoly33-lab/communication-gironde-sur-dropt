@@ -3,52 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intranet - Gironde sur Dropt</title>
+    <title>Intranet - Gironde-sur-Dropt</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        droptVert: '#009688',
-                        droptVertFonce: '#00796b',
-                        droptOrange: '#ff9800'
-                    }
-                }
-            }
-        }
-    </script>
 </head>
 <body class="bg-slate-100 text-gray-800 font-sans">
 
     <script>
+        // REMPLACEZ PAR VOTRE LIEN COPIÉ PRÉCÉDEMMENT (EXÉCUTABLE DE L'APPS SCRIPT)
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwPQDiVU09R0ucqMAcacytbkIKQBEUiEq0PAyEdx8HmRar0cTzbos1msMK6fwylUMbmQw/exec";
         
-        // Liste exacte de vos adhérents et de leurs fonctions
+        // RESTAURATION DE VOTRE ÉQUIPE COMPLÈTE
         const ADHERENTS = [
-            { nom: "Cathy Rosolen", fonction: "Conseillère Déléguée" },
             { nom: "Philippe Moutier", fonction: "Maire" },
-            { nom: "Muriel Joly", fonction: "Bénévole" }
+            { nom: "Cathy Rosolen", fonction: "Conseillère Déléguée" },
+            { nom: "Muriel Joly", fonction: "Bénévole" },
+            { nom: "Thierry Gaillac", fonction: "Adjoint Urbanisme & Travaux" },
+            { nom: "Sylvie Dulong", fonction: "Adjointe Culture & Animation" },
+            { nom: "Jean-Marc Desqueyroux", fonction: "Adjoint Environnement" },
+            { nom: "Corinne Martinez", fonction: "Conseillère Enfance & Écoles" }
         ];
 
         var categorieActuelle = "";
         var tousLesArticles = [];
     </script>
 
+    <!-- HEADER STRICTEMENT RESTAURÉ -->
     <header class="bg-[#009688] text-white p-4 sticky top-0 shadow-md z-30 flex justify-between items-center">
         <div onclick="location.reload()" class="cursor-pointer flex items-center space-x-2">
             <span class="text-xl">🏰</span>
             <h1 class="text-base md:text-lg font-bold tracking-tight">Intranet Gironde-sur-Dropt</h1>
         </div>
-        <div class="text-xs font-semibold bg-white/20 px-3 py-1.5 rounded-lg flex items-center gap-1">
+        <div class="text-xs font-semibold bg-[#00796b] px-3 py-1.5 rounded-lg flex items-center gap-1 shadow-sm">
             💻 Vue d'ensemble Élus
         </div>
     </header>
 
     <div class="max-w-7xl mx-auto p-4 lg:grid lg:grid-cols-3 lg:gap-6">
         
+        <!-- COLONNE GAUCHE -->
         <div class="lg:col-span-2 space-y-6">
             
+            <!-- BLOC CALENDRIER (JUIN 2026) -->
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
                 <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">📅 CALENDRIER DE L'ÉQUIPE (JUIN 2026)</h2>
                 <div class="grid grid-cols-7 gap-1 text-center text-xs font-bold text-gray-400 mb-2">
@@ -57,45 +52,87 @@
                 <div id="grilleCalendrier" class="grid grid-cols-7 gap-1.5 text-center text-sm"></div>
             </div>
 
+            <!-- BLOC COMMISSIONS : RETOUR DE TOUS VOS BOUTONS ET COMPTEURS -->
             <div id="zoneCommissions">
-                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">📁 COMMISSIONS & PUBLICATIONS</h3>
+                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">📁 COMMISSIONS &amp; PUBLICATIONS</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     
-                    <div onclick="ouvrirCategorie('Culture et Patrimoine')" class="bg-amber-50 border border-amber-200 p-4 rounded-xl flex items-center space-x-4 cursor-pointer hover:shadow-md transition">
-                        <div class="p-3 bg-amber-500 text-white rounded-lg text-xl">🏛️</div>
-                        <div>
-                            <h4 class="font-bold text-amber-900 text-sm">Culture & Patrimoine</h4>
-                            <p class="text-xs text-amber-600">Cliquez pour voir les publications</p>
+                    <!-- Edito du Maire -->
+                    <div onclick="ouvrirCategorie('Edito du Maire')" class="bg-rose-50 border border-rose-200 p-4 rounded-xl flex items-center justify-between cursor-pointer hover:shadow-md transition">
+                        <div class="flex items-center space-x-4">
+                            <div class="p-3 bg-rose-500 text-white rounded-lg text-xl">✍️</div>
+                            <div>
+                                <h4 class="font-bold text-rose-900 text-sm">Édito du Maire</h4>
+                                <p class="text-xs text-rose-600">Cliquez pour voir les publications</p>
+                            </div>
                         </div>
+                        <span id="badge-Edito-du-Maire" class="bg-rose-200 text-rose-800 text-xs font-bold px-2 py-1 rounded-full">0</span>
                     </div>
 
-                    <div onclick="ouvrirCategorie('Enfance et Jeunesse')" class="bg-blue-50 border border-blue-200 p-4 rounded-xl flex items-center space-x-4 cursor-pointer hover:shadow-md transition">
-                        <div class="p-3 bg-blue-500 text-white rounded-lg text-xl">🎒</div>
-                        <div>
-                            <h4 class="font-bold text-blue-900 text-sm">Enfance & Écoles</h4>
-                            <p class="text-xs text-blue-600">Cliquez pour voir les publications</p>
+                    <!-- Culture & Patrimoine -->
+                    <div onclick="ouvrirCategorie('Culture et Patrimoine')" class="bg-amber-50 border border-amber-200 p-4 rounded-xl flex items-center justify-between cursor-pointer hover:shadow-md transition">
+                        <div class="flex items-center space-x-4">
+                            <div class="p-3 bg-amber-500 text-white rounded-lg text-xl">🏛️</div>
+                            <div>
+                                <h4 class="font-bold text-amber-900 text-sm">Culture, Patrimoine &amp; Anim.</h4>
+                                <p class="text-xs text-amber-600">Cliquez pour voir les publications</p>
+                            </div>
                         </div>
+                        <span id="badge-Culture-et-Patrimoine" class="bg-amber-200 text-amber-800 text-xs font-bold px-2 py-1 rounded-full">0</span>
                     </div>
 
-                    <div onclick="ouvrirCategorie('Travaux')" class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl flex items-center space-x-4 cursor-pointer hover:shadow-md transition">
-                        <div class="p-3 bg-emerald-500 text-white rounded-lg text-xl">🚧</div>
-                        <div>
-                            <h4 class="font-bold text-emerald-900 text-sm">Travaux & Urbanisme</h4>
-                            <p class="text-xs text-emerald-600">Cliquez pour voir les publications</p>
+                    <!-- Enfance & Écoles -->
+                    <div onclick="ouvrirCategorie('Enfance et Jeunesse')" class="bg-blue-50 border border-blue-200 p-4 rounded-xl flex items-center justify-between cursor-pointer hover:shadow-md transition">
+                        <div class="flex items-center space-x-4">
+                            <div class="p-3 bg-blue-500 text-white rounded-lg text-xl">🎒</div>
+                            <div>
+                                <h4 class="font-bold text-blue-900 text-sm">Enfance, Jeunesse &amp; Écoles</h4>
+                                <p class="text-xs text-blue-600">Cliquez pour voir les publications</p>
+                            </div>
                         </div>
+                        <span id="badge-Enfance-et-Jeunesse" class="bg-blue-200 text-blue-800 text-xs font-bold px-2 py-1 rounded-full">0</span>
                     </div>
 
-                    <div onclick="ouvrirCategorie('Divers Infos')" class="bg-purple-50 border border-purple-200 p-4 rounded-xl flex items-center space-x-4 cursor-pointer hover:shadow-md transition">
-                        <div class="p-3 bg-purple-500 text-white rounded-lg text-xl">📢</div>
-                        <div>
-                            <h4 class="font-bold text-purple-900 text-sm">Divers / Infos générales</h4>
-                            <p class="text-xs text-purple-600">Cliquez pour voir les publications</p>
+                    <!-- Travaux & Urbanisme -->
+                    <div onclick="ouvrirCategorie('Travaux')" class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl flex items-center justify-between cursor-pointer hover:shadow-md transition">
+                        <div class="flex items-center space-x-4">
+                            <div class="p-3 bg-emerald-500 text-white rounded-lg text-xl">🚧</div>
+                            <div>
+                                <h4 class="font-bold text-emerald-900 text-sm">Travaux, Urbanisme &amp; Séc.</h4>
+                                <p class="text-xs text-emerald-600">Cliquez pour voir les publications</p>
+                            </div>
                         </div>
+                        <span id="badge-Travaux" class="bg-emerald-200 text-emerald-800 text-xs font-bold px-2 py-1 rounded-full">0</span>
+                    </div>
+
+                    <!-- Cadre de vie -->
+                    <div onclick="ouvrirCategorie('Cadre de vie')" class="bg-lime-50 border border-lime-200 p-4 rounded-xl flex items-center justify-between cursor-pointer hover:shadow-md transition">
+                        <div class="flex items-center space-x-4">
+                            <div class="p-3 bg-lime-500 text-white rounded-lg text-xl">🌿</div>
+                            <div>
+                                <h4 class="font-bold text-lime-900 text-sm">Cadre de vie &amp; Environnement</h4>
+                                <p class="text-xs text-lime-600">Cliquez pour voir les publications</p>
+                            </div>
+                        </div>
+                        <span id="badge-Cadre-de-vie" class="bg-lime-200 text-lime-800 text-xs font-bold px-2 py-1 rounded-full">0</span>
+                    </div>
+
+                    <!-- Divers / Infos -->
+                    <div onclick="ouvrirCategorie('Divers Infos')" class="bg-purple-50 border border-purple-200 p-4 rounded-xl flex items-center justify-between cursor-pointer hover:shadow-md transition">
+                        <div class="flex items-center space-x-4">
+                            <div class="p-3 bg-purple-500 text-white rounded-lg text-xl">📢</div>
+                            <div>
+                                <h4 class="font-bold text-purple-900 text-sm">Divers / Infos générales</h4>
+                                <p class="text-xs text-purple-600">Cliquez pour voir les publications</p>
+                            </div>
+                        </div>
+                        <span id="badge-Divers-Infos" class="bg-purple-200 text-purple-800 text-xs font-bold px-2 py-1 rounded-full">0</span>
                     </div>
 
                 </div>
             </div>
 
+            <!-- FIL D'ACTUALITÉS -->
             <div id="zoneArticles" class="hidden space-y-4">
                 <div class="flex justify-between items-center">
                     <h3 id="titreCategorie" class="font-bold text-gray-800 text-base">Publications</h3>
@@ -106,6 +143,7 @@
 
         </div>
 
+        <!-- COLONNE DROITE : FORMULAIRE -->
         <div class="mt-6 lg:mt-0">
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 sticky top-24">
                 <h3 class="font-bold text-sm text-gray-800 mb-4 flex items-center gap-1">📝 Nouvelle Publication</h3>
@@ -119,9 +157,11 @@
                     <div>
                         <label class="block font-semibold text-gray-600 mb-1">2. COMMISSION CIBLE</label>
                         <select id="formCommission" class="w-full border rounded-lg p-2.5 bg-gray-50 font-medium">
-                            <option value="Culture et Patrimoine">🏛️ Culture & Patrimoine</option>
-                            <option value="Enfance et Jeunesse">🎒 Enfance & Écoles</option>
-                            <option value="Travaux">🚧 Travaux & Urbanisme</option>
+                            <option value="Edito du Maire">✍️ Édito du Maire</option>
+                            <option value="Culture et Patrimoine">🏛️ Culture, Patrimoine &amp; Anim.</option>
+                            <option value="Enfance et Jeunesse">🎒 Enfance, Jeunesse &amp; Écoles</option>
+                            <option value="Travaux">🚧 Travaux, Urbanisme &amp; Séc.</option>
+                            <option value="Cadre de vie">🌿 Cadre de vie &amp; Environnement</option>
                             <option value="Divers Infos">📢 Divers / Infos générales</option>
                         </select>
                     </div>
@@ -137,7 +177,7 @@
                     </div>
 
                     <div>
-                        <label class="block font-semibold text-gray-600 mb-1">📅 DATE & HEURE DE L'ÉVÉNEMENT (Optionnel)</label>
+                        <label class="block font-semibold text-gray-600 mb-1">📅 DATE &amp; HEURE DE L'ÉVÉNEMENT (Optionnel)</label>
                         <input type="datetime-local" id="formDateEvenement" class="w-full border rounded-lg p-2.5 bg-gray-50 font-medium">
                     </div>
 
@@ -189,8 +229,20 @@
             .then(res => res.json())
             .then(data => {
                 tousLesArticles = data;
+                calculerCompteurs();
                 genererCalendrier();
                 if(categorieActuelle !== "") afficherArticles();
+            });
+        }
+
+        // FONCTION DE CALCUL ET REAFFICHAGE DES CHIFFRES SUR LES CARTES
+        function calculerCompteurs() {
+            const categories = ['Edito du Maire', 'Culture et Patrimoine', 'Enfance et Jeunesse', 'Travaux', 'Cadre de vie', 'Divers Infos'];
+            categories.forEach(cat => {
+                let count = tousLesArticles.filter(a => a.commission === cat).length;
+                let elementId = "badge-" + cat.replace(/ /g, "-");
+                let badge = document.getElementById(elementId);
+                if(badge) badge.innerText = count;
             });
         }
 
@@ -199,28 +251,24 @@
             if(!container) return;
             container.innerHTML = "";
 
-            // Le 1er Juin 2026 est un Lundi (Pas besoin de décalage de cases vides pour ce mois spécifique)
             for (let i = 1; i <= 30; i++) {
                 let dayBox = document.createElement("div");
                 dayBox.className = "bg-gray-50 text-gray-700 py-2 rounded-lg text-xs font-semibold border border-gray-100 relative";
                 dayBox.innerText = i;
 
-                // Recherche si une ligne possède un événement ce jour-là
                 let correspondances = tousLesArticles.filter(art => {
                     if(!art.date_evenement) return false;
                     let d = new Date(art.date_evenement);
-                    return d.getDate() === i && d.getMonth() === 5 && d.getFullYear() === 2026; // 5 = Juin
+                    return d.getDate() === i && d.getMonth() === 5 && d.getFullYear() === 2026;
                 });
 
                 if(correspondances.length > 0) {
-                    // Colore la case en fonction de la commission (Ambre pour Travaux, Vert pour les autres)
                     let aDesTravaux = correspondances.some(art => art.commission === "Travaux");
                     if(aDesTravaux) {
                         dayBox.className = "bg-amber-500 text-white py-2 rounded-lg text-xs font-bold shadow-sm cursor-pointer";
                     } else {
                         dayBox.className = "bg-teal-600 text-white py-2 rounded-lg text-xs font-bold shadow-sm cursor-pointer";
                     }
-                    // Affiche le titre de l'événement au survol de la souris
                     dayBox.title = correspondances.map(art => `[${art.commission}] ${art.sujet}`).join("\n");
                 }
 
@@ -263,7 +311,7 @@
                 liste.innerHTML += `
                     <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 space-y-2">
                         <div class="flex justify-between items-center text-[11px]">
-                            <span class="font-bold text-gray-500">👤 ${a.auteur}</span>
+                            <span class="font-bold text-gray-500">👤 ${a.auteur} (${a.fonction})</span>
                             <span class="bg-gray-100 px-2 py-0.5 rounded text-gray-700 font-bold">${a.statut}</span>
                         </div>
                         <h4 class="font-bold text-sm text-gray-900">${a.sujet}</h4>
@@ -280,7 +328,6 @@
             btn.disabled = true;
             btn.innerText = "Synchronisation... ⏳";
 
-            // Trouver la fonction de l'auteur sélectionné
             let auteurSel = document.getElementById("formAuteur").value;
             let adherent = ADHERENTS.find(a => a.nom === auteurSel);
             let fonctionSel = adherent ? adherent.fonction : "";
