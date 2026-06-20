@@ -20,22 +20,12 @@
             }
         }
     </script>
-    <style>
-        .category-radio input[type="radio"] { display: none; }
-        .category-radio input[type="radio"]:checked + label {
-            background-color: #32b997;
-            color: white;
-            border-color: #32b997;
-        }
-    </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans pb-24 md:pb-0">
 
-    <!-- CONFIGURATION : REMPLACEZ CETTE URL PAR VOTRE DEPLOIEMENT GOOGLE WEB APP -->
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwptDNWm-pUIdwZ281hWpW2kwViuAChq9G80P8ctpaQPAJT6oa9zwg-B_mZCtAQocM7Lw/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwPQDiVU09R0ucqMAcacytbkIKQBEUiEq0PAyEdx8HmRar0cTzbos1msMK6fwylUMbmQw/exec";
         
-        // Données officielles de l'équipe municipale et des bénévoles
         const ADHERENTS = [
             { nom: "Philippe Moutier", fonction: "Maire", photo: "👨‍💼" },
             { nom: "Graziella Chiappa", fonction: "1ère Adjointe", photo: "👩‍💼" },
@@ -52,6 +42,10 @@
             { nom: "Marlène Larriaut", fonction: "Bénévole", photo: "🤝" },
             { nom: "Muriel Joly", fonction: "Bénévole", photo: "🤝" }
         ];
+
+        var categorieActuelle = "";
+        var statutFiltreActuel = "⏳ À venir";
+        var tousLesArticles = [];
     </script>
 
     <!-- HEADER -->
@@ -75,7 +69,7 @@
             <input type="text" oninput="filtrerRecherche(this.value)" placeholder="🔍 Rechercher un mot, un lieu..." class="w-full border-2 border-gray-200 p-2.5 rounded-xl text-sm focus:outline-none">
         </div>
 
-        <!-- ZONE PRINCIPALE (GAUCHE + CENTRE) -->
+        <!-- ZONE PRINCIPALE -->
         <div class="md:col-span-2 space-y-5">
             <div id="pageAccueil" class="space-y-5">
                 <!-- AGENDA GLOBAL CONSOLIDÉ -->
@@ -92,7 +86,7 @@
                     </div>
                 </div>
 
-                <!-- LES 15 CARTES OFFICIELLES -->
+                <!-- LES 15 CARTES -->
                 <div>
                     <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">📁 Commissions & Thématiques</h3>
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -122,18 +116,19 @@
                     <h2 id="titreCategorie" class="text-xl font-bold text-gray-800">Travaux</h2>
                 </div>
 
+                <!-- Boutons de filtrage par statut -->
                 <div class="flex space-x-1 bg-gray-200 p-1 rounded-lg text-xs font-bold">
-                    <button class="flex-1 py-2 px-1 bg-white text-droptRouge rounded-md shadow-sm">⏳ À venir</button>
-                    <button class="flex-1 py-2 px-1 text-gray-600">🛠️ En cours</button>
-                    <button class="flex-1 py-2 px-1 text-gray-600">✅ Terminé</button>
-                    <button class="flex-1 py-2 px-1 text-gray-600">❌ Reporté</button>
+                    <button id="btnStatutAvenir" onclick="changerFiltreStatut('⏳ À venir')" class="flex-1 py-2 px-1 bg-white text-droptRouge rounded-md shadow-sm">⏳ À venir</button>
+                    <button id="btnStatutEnCours" onclick="changerFiltreStatut('🛠️ En cours')" class="flex-1 py-2 px-1 text-gray-600">🛠️ En cours</button>
+                    <button id="btnStatutTermine" onclick="changerFiltreStatut('✅ Terminé')" class="flex-1 py-2 px-1 text-gray-600">✅ Terminé</button>
+                    <button id="btnStatutReporte" onclick="changerFiltreStatut('❌ Reporté')" class="flex-1 py-2 px-1 text-gray-600">❌ Reporté</button>
                 </div>
 
                 <div id="listeArticles" class="space-y-4"></div>
             </div>
         </div>
 
-        <!-- COLONNE DE DROITE : FORMULAIRE DE PUBLICATION -->
+        <!-- COLONNE DE DROITE : FORMULAIRE -->
         <div id="formContainer" class="hidden md:block fixed inset-0 bg-black/50 md:relative md:bg-transparent z-40 md:z-0">
             <div class="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl p-5 max-h-[90vh] overflow-y-auto md:relative md:rounded-xl md:shadow-sm md:border md:border-gray-200 max-w-md mx-auto md:mx-0 md:p-5">
                 <div class="flex justify-between items-center mb-4 border-b pb-2">
@@ -142,14 +137,12 @@
                 </div>
 
                 <form id="publicationForm" class="space-y-4 text-xs" onsubmit="soumettreFormulaire(event)">
-                    <!-- Auteur Rédacteur -->
                     <div>
                         <label class="block font-bold text-gray-500 uppercase mb-1">1. Qui êtes-vous ?</label>
                         <select id="formAuteur" class="w-full border rounded-lg p-2 bg-white font-medium focus:border-droptVert" onchange="updateAdherentInfo()"></select>
                         <div id="adherentBadge" class="mt-2 flex items-center space-x-2 text-gray-500 italic"></div>
                     </div>
 
-                    <!-- Catégorie / Commission -->
                     <div>
                         <label class="block font-bold text-gray-500 uppercase mb-1">2. Commission Cible</label>
                         <select id="formCommission" class="w-full border rounded-lg p-2 bg-white font-medium focus:border-droptVert">
@@ -171,15 +164,24 @@
                         </select>
                     </div>
 
-                    <!-- Sujet -->
+                    <!-- AJOUT DU SÉLECTEUR DE STATUT DANS LE FORMULAIRE -->
                     <div>
-                        <label class="block font-bold text-gray-500 uppercase mb-1">3. Objet / Titre court</label>
+                        <label class="block font-bold text-gray-500 uppercase mb-1">3. Statut initial de l'information</label>
+                        <select id="formStatut" class="w-full border rounded-lg p-2 bg-white font-medium focus:border-droptVert">
+                            <option value="⏳ À venir">⏳ À venir</option>
+                            <option value="🛠️ En cours">🛠️ En cours</option>
+                            <option value="✅ Terminé">✅ Terminé</option>
+                            <option value="❌ Reporté">❌ Reporté</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-gray-500 uppercase mb-1">4. Objet / Titre court</label>
                         <input type="text" id="formSujet" placeholder="Ex: Dépôt sauvage Rue du Port" class="w-full border rounded-lg p-2" required>
                     </div>
 
-                    <!-- Diffusion Hybride -->
                     <div>
-                        <label class="block font-bold text-gray-500 uppercase mb-1.5">4. Diffusion demandée</label>
+                        <label class="block font-bold text-gray-500 uppercase mb-1.5">5. Diffusion demandée</label>
                         <div class="grid grid-cols-2 gap-1.5 font-medium">
                             <label class="flex items-center space-x-1.5 border p-2 rounded-lg bg-gray-50 cursor-pointer"><input type="checkbox" id="diffJournal" class="accent-droptVert"> <span>📰 Journal municipal</span></label>
                             <label class="flex items-center space-x-1.5 border p-2 rounded-lg bg-gray-50 cursor-pointer"><input type="checkbox" id="diffSite" class="accent-droptVert"> <span>🌐 Site Internet</span></label>
@@ -188,15 +190,13 @@
                         </div>
                     </div>
 
-                    <!-- Médias multi-formats -->
                     <div>
-                        <label class="block font-bold text-gray-500 uppercase mb-1">5. Pièces Jointes (Photos HD, Vidéos, PDF)</label>
+                        <label class="block font-bold text-gray-500 uppercase mb-1">6. Pièces Jointes</label>
                         <input type="file" id="formFiles" multiple class="w-full text-xs border p-1 rounded-lg bg-gray-50">
                     </div>
 
-                    <!-- Descriptif -->
                     <div>
-                        <label class="block font-bold text-gray-500 uppercase mb-1">6. Contenu détaillé de l'information</label>
+                        <label class="block font-bold text-gray-500 uppercase mb-1">7. Contenu détaillé</label>
                         <textarea id="formContenu" rows="4" placeholder="Écrivez votre message ici..." class="w-full border rounded-lg p-2" required></textarea>
                     </div>
 
@@ -239,6 +239,7 @@
         }
 
         function ouvrirCategorie(cat) {
+            categorieActuelle = cat;
             document.getElementById('pageAccueil').classList.add('hidden');
             document.getElementById('pageCategorie').classList.remove('hidden');
             document.getElementById('btnRetour').classList.remove('hidden');
@@ -262,7 +263,26 @@
             else if(cat === "Divers Infos") icone = "ℹ️";
             
             document.getElementById('titreIcone').innerText = icone;
-            filtrerArticlesParCommission(cat);
+            changerFiltreStatut("⏳ À venir"); // Par défaut à l'ouverture
+        }
+
+        function changerFiltreStatut(statut) {
+            statutFiltreActuel = statut;
+            
+            // Design des boutons actifs/inactifs
+            const statuts = ["⏳ À venir", "🛠️ En cours", "✅ Terminé", "❌ Reporté"];
+            const IDs = ["btnStatutAvenir", "btnStatutEnCours", "btnStatutTermine", "btnStatutReporte"];
+            
+            IDs.forEach((id, index) => {
+                const btn = document.getElementById(id);
+                if(statuts[index] === statut) {
+                    btn.className = "flex-1 py-2 px-1 bg-white text-droptRouge rounded-md shadow-sm";
+                } else {
+                    btn.className = "flex-1 py-2 px-1 text-gray-600";
+                }
+            });
+
+            filtrerArticles();
         }
 
         function afficherAccueil() {
@@ -303,6 +323,7 @@
                     auteur: nomAuteur,
                     fonction: fct,
                     commission: document.getElementById("formCommission").value,
+                    statut: document.getElementById("formStatut").value,
                     sujet: document.getElementById("formSujet").value,
                     contenu: document.getElementById("formContenu").value,
                     journal_municipal: document.getElementById("diffJournal").checked,
@@ -318,12 +339,12 @@
                 })
                 .then(res => res.json())
                 .then(response => {
-                    alert("Succès ! L'information a été enregistrée et transmise.");
+                    alert("Succès ! L'information a été enregistrée.");
                     document.getElementById("publicationForm").reset();
                     toggleForm();
                     chargerDonnees();
                 })
-                .catch(err => alert("Erreur réseau ou configuration Google Script."))
+                .catch(err => alert("Erreur réseau."))
                 .finally(() => {
                     submitButton.innerText = "🚀 Publier l'information";
                     submitButton.disabled = false;
@@ -343,23 +364,23 @@
             });
         }
 
-        var tousLesArticles = [];
-
         function chargerDonnees() {
             if(GOOGLE_SCRIPT_URL === "VOTRE_URL_GOOGLE_APPS_SCRIPT_ICI") return;
             fetch(GOOGLE_SCRIPT_URL)
             .then(res => res.json())
             .then(data => {
                 tousLesArticles = data;
+                if(categorieActuelle !== "") filtrerArticles();
             });
         }
 
-        function filtrerArticlesParCommission(comm) {
+        function filtrerArticles() {
             var html = "";
-            var filtres = tousLesArticles.filter(a => a.commission === comm);
+            // Double filtre : par Commission ET par Statut
+            var filtres = tousLesArticles.filter(a => a.commission === categorieActuelle && a.statut === statutFiltreActuel);
             
             if(filtres.length === 0) {
-                html = "<p class='text-xs text-gray-400 italic p-4 text-center'>Aucun article publié pour le moment dans cette commission.</p>";
+                html = `<p class='text-xs text-gray-400 italic p-4 text-center'>Aucun article "${statutFiltreActuel}" dans cette commission.</p>`;
             }
             
             filtres.forEach(function(a) {
@@ -378,7 +399,7 @@
                 html += `<div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-3">
                     <div class="flex justify-between items-center text-xs text-gray-400">
                         <span class="font-semibold text-gray-700">👤 ${a.auteur} (${a.fonction})</span>
-                        <span>📅 Prévu : 22 Juin 2026</span>
+                        <span class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded font-bold">${a.statut}</span>
                     </div>
                     <h4 class="font-bold text-gray-900 text-sm">${a.sujet}</h4>
                     <p class="text-xs text-gray-600 leading-relaxed">${a.contenu}</p>
@@ -410,7 +431,10 @@
             
             filtres.forEach(function(a) {
                 html += `<div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-2">
-                    <span class="text-[9px] uppercase font-bold text-droptRouge bg-droptRougePastel px-2 py-0.5 rounded">${a.commission}</span>
+                    <div class="flex justify-between text-[9px] font-bold">
+                        <span class="text-droptRouge bg-droptRougePastel px-2 py-0.5 rounded uppercase">${a.commission}</span>
+                        <span class="text-gray-500">${a.statut}</span>
+                    </div>
                     <h4 class="font-bold text-gray-900 text-sm mt-1">${a.sujet}</h4>
                     <p class="text-xs text-gray-600">${a.contenu}</p>
                 </div>`;
