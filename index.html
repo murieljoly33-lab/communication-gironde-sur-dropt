@@ -10,7 +10,7 @@
             theme: {
                 extend: {
                     colors: {
-                        droptVert: '#009688', 
+                        droptVert: '#009688',
                         droptVertFonce: '#00796b',
                         droptOrange: '#ff9800'
                     }
@@ -22,9 +22,9 @@
 <body class="bg-slate-100 text-gray-800 font-sans">
 
     <script>
-        // METS ICI TON LIEN GOOGLE APPS SCRIPT EXÉCUTABLE :
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwPQDiVU09R0ucqMAcacytbkIKQBEUiEq0PAyEdx8HmRar0cTzbos1msMK6fwylUMbmQw/exec";
         
+        // Liste exacte de vos adhérents et de leurs fonctions
         const ADHERENTS = [
             { nom: "Cathy Rosolen", fonction: "Conseillère Déléguée" },
             { nom: "Philippe Moutier", fonction: "Maire" },
@@ -32,17 +32,16 @@
         ];
 
         var categorieActuelle = "";
-        var statutFiltreActuel = "TOUT";
         var tousLesArticles = [];
     </script>
 
     <header class="bg-[#009688] text-white p-4 sticky top-0 shadow-md z-30 flex justify-between items-center">
         <div onclick="location.reload()" class="cursor-pointer flex items-center space-x-2">
-            <span class="text-xl" aria-hidden="true">🏰</span>
+            <span class="text-xl">🏰</span>
             <h1 class="text-base md:text-lg font-bold tracking-tight">Intranet Gironde-sur-Dropt</h1>
         </div>
         <div class="text-xs font-semibold bg-white/20 px-3 py-1.5 rounded-lg flex items-center gap-1">
-            <span aria-hidden="true">📅</span> Vue d'ensemble Élus
+            💻 Vue d'ensemble Élus
         </div>
     </header>
 
@@ -51,7 +50,7 @@
         <div class="lg:col-span-2 space-y-6">
             
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3"><span aria-hidden="true">📅</span> Calendrier de l'Équipe (Juin 2026)</h2>
+                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">📅 CALENDRIER DE L'ÉQUIPE (JUIN 2026)</h2>
                 <div class="grid grid-cols-7 gap-1 text-center text-xs font-bold text-gray-400 mb-2">
                     <div>L</div><div>M</div><div>M</div><div>J</div><div>V</div><div>S</div><div>D</div>
                 </div>
@@ -59,11 +58,11 @@
             </div>
 
             <div id="zoneCommissions">
-                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3"><span aria-hidden="true">📂</span> Commissions & Publications</h3>
+                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">📁 COMMISSIONS & PUBLICATIONS</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     
                     <div onclick="ouvrirCategorie('Culture et Patrimoine')" class="bg-amber-50 border border-amber-200 p-4 rounded-xl flex items-center space-x-4 cursor-pointer hover:shadow-md transition">
-                        <div class="p-3 bg-amber-500 text-white rounded-lg text-xl" aria-hidden="true">🏛️</div>
+                        <div class="p-3 bg-amber-500 text-white rounded-lg text-xl">🏛️</div>
                         <div>
                             <h4 class="font-bold text-amber-900 text-sm">Culture & Patrimoine</h4>
                             <p class="text-xs text-amber-600">Cliquez pour voir les publications</p>
@@ -71,7 +70,7 @@
                     </div>
 
                     <div onclick="ouvrirCategorie('Enfance et Jeunesse')" class="bg-blue-50 border border-blue-200 p-4 rounded-xl flex items-center space-x-4 cursor-pointer hover:shadow-md transition">
-                        <div class="p-3 bg-blue-500 text-white rounded-lg text-xl" aria-hidden="true">🎒</div>
+                        <div class="p-3 bg-blue-500 text-white rounded-lg text-xl">🎒</div>
                         <div>
                             <h4 class="font-bold text-blue-900 text-sm">Enfance & Écoles</h4>
                             <p class="text-xs text-blue-600">Cliquez pour voir les publications</p>
@@ -79,7 +78,7 @@
                     </div>
 
                     <div onclick="ouvrirCategorie('Travaux')" class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl flex items-center space-x-4 cursor-pointer hover:shadow-md transition">
-                        <div class="p-3 bg-emerald-500 text-white rounded-lg text-xl" aria-hidden="true">🚧</div>
+                        <div class="p-3 bg-emerald-500 text-white rounded-lg text-xl">🚧</div>
                         <div>
                             <h4 class="font-bold text-emerald-900 text-sm">Travaux & Urbanisme</h4>
                             <p class="text-xs text-emerald-600">Cliquez pour voir les publications</p>
@@ -87,7 +86,7 @@
                     </div>
 
                     <div onclick="ouvrirCategorie('Divers Infos')" class="bg-purple-50 border border-purple-200 p-4 rounded-xl flex items-center space-x-4 cursor-pointer hover:shadow-md transition">
-                        <div class="p-3 bg-purple-500 text-white rounded-lg text-xl" aria-hidden="true">📢</div>
+                        <div class="p-3 bg-purple-500 text-white rounded-lg text-xl">📢</div>
                         <div>
                             <h4 class="font-bold text-purple-900 text-sm">Divers / Infos générales</h4>
                             <p class="text-xs text-purple-600">Cliquez pour voir les publications</p>
@@ -109,7 +108,7 @@
 
         <div class="mt-6 lg:mt-0">
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 sticky top-24">
-                <h3 class="font-bold text-sm text-gray-800 mb-4 flex items-center gap-1"><span aria-hidden="true">📝</span> Nouvelle Publication</h3>
+                <h3 class="font-bold text-sm text-gray-800 mb-4 flex items-center gap-1">📝 Nouvelle Publication</h3>
                 
                 <form id="publicationForm" class="space-y-4 text-xs" onsubmit="soumettreFormulaire(event)">
                     <div>
@@ -138,7 +137,7 @@
                     </div>
 
                     <div>
-                        <label class="block font-semibold text-gray-600 mb-1"><span aria-hidden="true">📅</span> DATE & HEURE DE L'ÉVÉNEMENT (Optionnel)</label>
+                        <label class="block font-semibold text-gray-600 mb-1">📅 DATE & HEURE DE L'ÉVÉNEMENT (Optionnel)</label>
                         <input type="datetime-local" id="formDateEvenement" class="w-full border rounded-lg p-2.5 bg-gray-50 font-medium">
                     </div>
 
@@ -155,12 +154,16 @@
                     <div>
                         <label class="block font-semibold text-gray-600 mb-1">6. DIFFUSION DEMANDÉE</label>
                         <div class="grid grid-cols-2 gap-2 mt-1">
-                            <label class="flex items-center space-x-2 border p-2 rounded bg-gray-50"><input type="checkbox" id="diffJournal"> <span>📰 Journal</span></label>
-                            <label class="flex items-center space-x-2 border p-2 rounded bg-gray-50"><input type="checkbox" id="diffSite"> <span>🌐 Site</span></label>
+                            <label class="flex items-center space-x-2 border p-2 rounded bg-gray-50 cursor-pointer">
+                                <input type="checkbox" id="diffJournal" class="rounded border-gray-3"> <span>📰 Journal</span>
+                            </label>
+                            <label class="flex items-center space-x-2 border p-2 rounded bg-gray-50 cursor-pointer">
+                                <input type="checkbox" id="diffSite" class="rounded border-gray-3"> <span>🌐 Site</span>
+                            </label>
                         </div>
                     </div>
 
-                    <button type="submit" id="btnSubmit" class="w-full bg-[#009688] text-white font-bold p-3 rounded-xl shadow hover:bg-teal-700 transition flex justify-center items-center gap-2">
+                    <button type="submit" id="btnSubmit" class="w-full bg-[#009688] text-white font-bold p-3 rounded-xl shadow hover:bg-teal-700 transition flex justify-center items-center gap-2 text-sm">
                         <span>🚀 Publier l'information</span>
                     </button>
                 </form>
@@ -196,38 +199,28 @@
             if(!container) return;
             container.innerHTML = "";
 
-            // Calcul du décalage pour Juin 2026 (1er Juin = Lundi -> index 0 en mode Lundi-Dimanche)
-            // En JS,getDay() donne 0 pour Dimanche, 1 pour Lundi, etc.
-            let premierJour = new Date(2026, 5, 1); // 5 correspond à Juin (0-indexed)
-            let decalage = premierJour.getDay() - 1; 
-            if (decalage === -1) decalage = 6; // Ajustement si le premier jour est un dimanche
-
-            // Ajout de cases vides pour respecter le bon jour de la semaine
-            for (let j = 0; j < decalage; j++) {
-                let caseVide = document.createElement("div");
-                caseVide.className = "bg-transparent py-2";
-                container.appendChild(caseVide);
-            }
-
-            // Génération des 30 jours de Juin 2026
+            // Le 1er Juin 2026 est un Lundi (Pas besoin de décalage de cases vides pour ce mois spécifique)
             for (let i = 1; i <= 30; i++) {
                 let dayBox = document.createElement("div");
                 dayBox.className = "bg-gray-50 text-gray-700 py-2 rounded-lg text-xs font-semibold border border-gray-100 relative";
                 dayBox.innerText = i;
 
+                // Recherche si une ligne possède un événement ce jour-là
                 let correspondances = tousLesArticles.filter(art => {
                     if(!art.date_evenement) return false;
                     let d = new Date(art.date_evenement);
-                    return d.getDate() === i && d.getMonth() === 5 && d.getFullYear() === 2026;
+                    return d.getDate() === i && d.getMonth() === 5 && d.getFullYear() === 2026; // 5 = Juin
                 });
 
                 if(correspondances.length > 0) {
+                    // Colore la case en fonction de la commission (Ambre pour Travaux, Vert pour les autres)
                     let aDesTravaux = correspondances.some(art => art.commission === "Travaux");
                     if(aDesTravaux) {
                         dayBox.className = "bg-amber-500 text-white py-2 rounded-lg text-xs font-bold shadow-sm cursor-pointer";
                     } else {
                         dayBox.className = "bg-teal-600 text-white py-2 rounded-lg text-xs font-bold shadow-sm cursor-pointer";
                     }
+                    // Affiche le titre de l'événement au survol de la souris
                     dayBox.title = correspondances.map(art => `[${art.commission}] ${art.sujet}`).join("\n");
                 }
 
@@ -287,16 +280,21 @@
             btn.disabled = true;
             btn.innerText = "Synchronisation... ⏳";
 
+            // Trouver la fonction de l'auteur sélectionné
+            let auteurSel = document.getElementById("formAuteur").value;
+            let adherent = ADHERENTS.find(a => a.nom === auteurSel);
+            let fonctionSel = adherent ? adherent.fonction : "";
+
             let payload = {
-                auteur: document.getElementById("formAuteur").value,
+                auteur: auteurSel,
+                fonction: fonctionSel,
                 commission: document.getElementById("formCommission").value,
                 statut: document.getElementById("formStatut").value,
                 date_evenement: document.getElementById("formDateEvenement").value,
                 sujet: document.getElementById("formSujet").value,
                 contenu: document.getElementById("formContenu").value,
                 journal_municipal: document.getElementById("diffJournal").checked,
-                site_internet: document.getElementById("diffSite").checked,
-                files: []
+                site_internet: document.getElementById("diffSite").checked
             };
 
             fetch(GOOGLE_SCRIPT_URL, {
@@ -312,7 +310,7 @@
             .catch(err => alert("Erreur de connexion."))
             .finally(() => {
                 btn.disabled = false;
-                btn.innerHTML = "<span>🚀 Publier l'information</span>";
+                btn.innerText = "🚀 Publier l'information";
             });
         }
     </script>
