@@ -9,31 +9,31 @@
 <body class="bg-slate-100 text-gray-800 font-sans">
 
     <script>
-        // REMPLACEZ PAR VOTRE LIEN COPIÉ PRÉCÉDEMMENT (EXÉCUTABLE DE L'APPS SCRIPT)
+        // METTEZ ICI VOTRE LIEN SCRIPT COPIÉ DEPUIS GOOGLE APPS SCRIPT
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwPQDiVU09R0ucqMAcacytbkIKQBEUiEq0PAyEdx8HmRar0cTzbos1msMK6fwylUMbmQw/exec";
         
-        // RESTAURATION DE VOTRE ÉQUIPE COMPLÈTE
+        // LA VRAIE LISTE DE VOS ÉLUS ET LEURS ROLES
         const ADHERENTS = [
             { nom: "Philippe Moutier", fonction: "Maire" },
-            { nom: "Cathy Rosolen", fonction: "Conseillère Déléguée" },
-            { nom: "Muriel Joly", fonction: "Bénévole" },
-            { nom: "Thierry Gaillac", fonction: "Adjoint Urbanisme & Travaux" },
-            { nom: "Sylvie Dulong", fonction: "Adjointe Culture & Animation" },
-            { nom: "Jean-Marc Desqueyroux", fonction: "Adjoint Environnement" },
-            { nom: "Corinne Martinez", fonction: "Conseillère Enfance & Écoles" }
+            { nom: "Cathy Rosolen", fonction: "Adjointe (Com, Enfance, Écoles, Culture, Assos, Patrimoine)" },
+            { nom: "Thierry Gaillac", fonction: "Adjoint (Travaux, Urbanisme, Sécurité, Bâtiments)" },
+            { nom: "Sylvie Dulong", fonction: "Adjointe (Solidarité, Social, Logement, CCAS)" },
+            { nom: "Jean-Marc Desqueyroux", fonction: "Adjoint (Cadre de vie, Environnement, Cimetière)" },
+            { nom: "Muriel Joly", fonction: "Conseillère (Com, Culture, Animations, Assos)" },
+            { nom: "Corinne Martinez", fonction: "Conseillère (Enfance, Jeunesse, Écoles)" }
         ];
 
         var categorieActuelle = "";
         var tousLesArticles = [];
     </script>
 
-    <!-- HEADER STRICTEMENT RESTAURÉ -->
-    <header class="bg-[#009688] text-white p-4 sticky top-0 shadow-md z-30 flex justify-between items-center">
+    <!-- HEADER AUX COULEURS DE VOTRE CHARTE ORIGINALE (DÉGRADÉ DE ROUGE) -->
+    <header class="bg-gradient-to-r from-red-700 to-red-950 text-white p-4 sticky top-0 shadow-md z-30 flex justify-between items-center">
         <div onclick="location.reload()" class="cursor-pointer flex items-center space-x-2">
             <span class="text-xl">🏰</span>
             <h1 class="text-base md:text-lg font-bold tracking-tight">Intranet Gironde-sur-Dropt</h1>
         </div>
-        <div class="text-xs font-semibold bg-[#00796b] px-3 py-1.5 rounded-lg flex items-center gap-1 shadow-sm">
+        <div class="text-xs font-semibold bg-red-900/50 px-3 py-1.5 rounded-lg flex items-center gap-1 shadow-sm border border-red-500/30">
             💻 Vue d'ensemble Élus
         </div>
     </header>
@@ -52,21 +52,21 @@
                 <div id="grilleCalendrier" class="grid grid-cols-7 gap-1.5 text-center text-sm"></div>
             </div>
 
-            <!-- BLOC COMMISSIONS : RETOUR DE TOUS VOS BOUTONS ET COMPTEURS -->
+            <!-- BLOC COMMISSIONS AVEC COMPTEURS -->
             <div id="zoneCommissions">
                 <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">📁 COMMISSIONS &amp; PUBLICATIONS</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     
                     <!-- Edito du Maire -->
-                    <div onclick="ouvrirCategorie('Edito du Maire')" class="bg-rose-50 border border-rose-200 p-4 rounded-xl flex items-center justify-between cursor-pointer hover:shadow-md transition">
+                    <div onclick="ouvrirCategorie('Edito du Maire')" class="bg-red-50 border border-red-200 p-4 rounded-xl flex items-center justify-between cursor-pointer hover:shadow-md transition">
                         <div class="flex items-center space-x-4">
-                            <div class="p-3 bg-rose-500 text-white rounded-lg text-xl">✍️</div>
+                            <div class="p-3 bg-red-600 text-white rounded-lg text-xl">✍️</div>
                             <div>
-                                <h4 class="font-bold text-rose-900 text-sm">Édito du Maire</h4>
-                                <p class="text-xs text-rose-600">Cliquez pour voir les publications</p>
+                                <h4 class="font-bold text-red-900 text-sm">Édito du Maire</h4>
+                                <p class="text-xs text-red-600">Cliquez pour voir les publications</p>
                             </div>
                         </div>
-                        <span id="badge-Edito-du-Maire" class="bg-rose-200 text-rose-800 text-xs font-bold px-2 py-1 rounded-full">0</span>
+                        <span id="badge-Edito-du-Maire" class="bg-red-200 text-red-800 text-xs font-bold px-2 py-1 rounded-full">0</span>
                     </div>
 
                     <!-- Culture & Patrimoine -->
@@ -74,7 +74,7 @@
                         <div class="flex items-center space-x-4">
                             <div class="p-3 bg-amber-500 text-white rounded-lg text-xl">🏛️</div>
                             <div>
-                                <h4 class="font-bold text-amber-900 text-sm">Culture, Patrimoine &amp; Anim.</h4>
+                                <h4 class="font-bold text-amber-900 text-sm">Culture, Patrimoine &amp; Animations</h4>
                                 <p class="text-xs text-amber-600">Cliquez pour voir les publications</p>
                             </div>
                         </div>
@@ -98,7 +98,7 @@
                         <div class="flex items-center space-x-4">
                             <div class="p-3 bg-emerald-500 text-white rounded-lg text-xl">🚧</div>
                             <div>
-                                <h4 class="font-bold text-emerald-900 text-sm">Travaux, Urbanisme &amp; Séc.</h4>
+                                <h4 class="font-bold text-emerald-900 text-sm">Travaux, Urbanisme &amp; Sécurité</h4>
                                 <p class="text-xs text-emerald-600">Cliquez pour voir les publications</p>
                             </div>
                         </div>
@@ -158,9 +158,9 @@
                         <label class="block font-semibold text-gray-600 mb-1">2. COMMISSION CIBLE</label>
                         <select id="formCommission" class="w-full border rounded-lg p-2.5 bg-gray-50 font-medium">
                             <option value="Edito du Maire">✍️ Édito du Maire</option>
-                            <option value="Culture et Patrimoine">🏛️ Culture, Patrimoine &amp; Anim.</option>
+                            <option value="Culture et Patrimoine">🏛️ Culture, Patrimoine &amp; Animations</option>
                             <option value="Enfance et Jeunesse">🎒 Enfance, Jeunesse &amp; Écoles</option>
-                            <option value="Travaux">🚧 Travaux, Urbanisme &amp; Séc.</option>
+                            <option value="Travaux">🚧 Travaux, Urbanisme &amp; Sécurité</option>
                             <option value="Cadre de vie">🌿 Cadre de vie &amp; Environnement</option>
                             <option value="Divers Infos">📢 Divers / Infos générales</option>
                         </select>
@@ -193,17 +193,21 @@
 
                     <div>
                         <label class="block font-semibold text-gray-600 mb-1">6. DIFFUSION DEMANDÉE</label>
-                        <div class="grid grid-cols-2 gap-2 mt-1">
-                            <label class="flex items-center space-x-2 border p-2 rounded bg-gray-50 cursor-pointer">
-                                <input type="checkbox" id="diffJournal" class="rounded border-gray-3"> <span>📰 Journal</span>
+                        <div class="grid grid-cols-3 gap-2 mt-1">
+                            <label class="flex items-center space-x-1 border p-2 rounded bg-gray-50 cursor-pointer text-[10px]">
+                                <input type="checkbox" id="diffJournal" class="rounded border-gray-300"> <span>📰 Journal</span>
                             </label>
-                            <label class="flex items-center space-x-2 border p-2 rounded bg-gray-50 cursor-pointer">
-                                <input type="checkbox" id="diffSite" class="rounded border-gray-3"> <span>🌐 Site</span>
+                            <label class="flex items-center space-x-1 border p-2 rounded bg-gray-50 cursor-pointer text-[10px]">
+                                <input type="checkbox" id="diffSite" class="rounded border-gray-300"> <span>🌐 Site</span>
+                            </label>
+                            <!-- RETOUR DU FLYER COLLONNE L -->
+                            <label class="flex items-center space-x-1 border p-2 rounded bg-gray-50 cursor-pointer text-[10px]">
+                                <input type="checkbox" id="diffFlyer" class="rounded border-gray-300"> <span>📄 Flyer</span>
                             </label>
                         </div>
                     </div>
 
-                    <button type="submit" id="btnSubmit" class="w-full bg-[#009688] text-white font-bold p-3 rounded-xl shadow hover:bg-teal-700 transition flex justify-center items-center gap-2 text-sm">
+                    <button type="submit" id="btnSubmit" class="w-full bg-gradient-to-r from-red-700 to-red-800 text-white font-bold p-3 rounded-xl shadow hover:from-red-800 hover:to-red-900 transition flex justify-center items-center gap-2 text-sm">
                         <span>🚀 Publier l'information</span>
                     </button>
                 </form>
@@ -235,7 +239,6 @@
             });
         }
 
-        // FONCTION DE CALCUL ET REAFFICHAGE DES CHIFFRES SUR LES CARTES
         function calculerCompteurs() {
             const categories = ['Edito du Maire', 'Culture et Patrimoine', 'Enfance et Jeunesse', 'Travaux', 'Cadre de vie', 'Divers Infos'];
             categories.forEach(cat => {
@@ -267,7 +270,7 @@
                     if(aDesTravaux) {
                         dayBox.className = "bg-amber-500 text-white py-2 rounded-lg text-xs font-bold shadow-sm cursor-pointer";
                     } else {
-                        dayBox.className = "bg-teal-600 text-white py-2 rounded-lg text-xs font-bold shadow-sm cursor-pointer";
+                        dayBox.className = "bg-red-600 text-white py-2 rounded-lg text-xs font-bold shadow-sm cursor-pointer";
                     }
                     dayBox.title = correspondances.map(art => `[${art.commission}] ${art.sujet}`).join("\n");
                 }
@@ -305,18 +308,25 @@
                 let dateTxt = "";
                 if(a.date_evenement) {
                     let d = new Date(a.date_evenement);
-                    dateTxt = `<p class="text-xs text-amber-600 font-bold mt-1">📅 Événement prévu le : ${d.toLocaleDateString('fr-FR')} à ${d.toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'})}</p>`;
+                    dateTxt = `<p class="text-xs text-red-600 font-bold mt-1">📅 Événement prévu le : ${d.toLocaleDateString('fr-FR')} à ${d.toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'})}</p>`;
                 }
+
+                let diffusions = [];
+                if(a.journal_municipal) diffusions.push("📰 Journal");
+                if(a.site_internet) diffusions.push("🌐 Site");
+                if(a.flyer) diffusions.push("📄 Flyer");
 
                 liste.innerHTML += `
                     <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 space-y-2">
                         <div class="flex justify-between items-center text-[11px]">
-                            <span class="font-bold text-gray-500">👤 ${a.auteur} (${a.fonction})</span>
+                            <span class="font-bold text-gray-500">👤 ${a.auteur}</span>
                             <span class="bg-gray-100 px-2 py-0.5 rounded text-gray-700 font-bold">${a.statut}</span>
                         </div>
                         <h4 class="font-bold text-sm text-gray-900">${a.sujet}</h4>
+                        <p class="text-[10px] text-gray-400 italic">${a.fonction}</p>
                         ${dateTxt}
                         <p class="text-xs text-gray-600 leading-relaxed">${a.contenu}</p>
+                        ${diffusions.length > 0 ? `<div class="pt-2 text-[10px] text-gray-400 font-medium">Diffusion : ${diffusions.join(' | ')}</div>` : ''}
                     </div>
                 `;
             });
@@ -341,7 +351,8 @@
                 sujet: document.getElementById("formSujet").value,
                 contenu: document.getElementById("formContenu").value,
                 journal_municipal: document.getElementById("diffJournal").checked,
-                site_internet: document.getElementById("diffSite").checked
+                site_internet: document.getElementById("diffSite").checked,
+                flyer: document.getElementById("diffFlyer").checked
             };
 
             fetch(GOOGLE_SCRIPT_URL, {
